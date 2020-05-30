@@ -4,10 +4,10 @@ Realtime collaborative drawing website built with Angular and P5.js. Webservice 
 ![Canvas Example](Capture2.PNG)
 ##### Darien Barnard
 * https://github.com/CrazyContraption
-* Role: Backend and optimization programming.
+* Role: Database and optimization programming.
 ##### Daniel Khan Hafner
 * https://github.com/arcanine300
-* Role: P5.js logic and networking functionality.
+* Role: P5.js logic and Socket.io functionality.
 ##### Timothy Morris
 * https://github.com/MeisterRed
-* Role: Frontend and email services.
+* Role: Frontend design and email services.
