@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Verify Password</h2>
+<br>
+<mat-form-field>
+    <mat-hint align="start"><strong>Confirm your password</strong></mat-hint>
+    <input matInput type="password" id="password" name="password" [(ngModel)]="data.input" #password="ngModel" required
+        minlength="6" maxlength="50" value="data.input" placeholder="Password">
+    <mat-error *ngIf='password.errors?.required'>Please enter your password to confirm your settings</mat-error>
+    <mat-error *ngIf='password.errors?.minlength'>Your password can't be less than 6 characters</mat-error>
+    <mat-error *ngIf='password.errors?.maxlength'>Your password can't be more than 50 characters</mat-error>
+</mat-form-field>
+<div mat-dialog-actions>
+    <button mat-stroked-button (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="accent" [mat-dialog-close]="data.input" cdkFocusInitial>Confirm</button>
+</div>

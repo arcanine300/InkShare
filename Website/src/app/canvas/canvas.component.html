@@ -1,0 +1,112 @@
+<!--Everything is handled by the TS and JS-->
+<div class="row">
+    <div class='col-sm-12'>
+        <div id='canvas-header' *ngIf='account && canvas'>
+            <mat-card id="info" class="mat-elevation-z8">
+                <h2>Welcome to <strong>"{{canvas.name}}"</strong>, {{account.userName}}</h2>
+            </mat-card>
+            <br>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Options
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-card id="border" class="mat-elevation-z8">
+                    <h3 *ngIf="permissions == 'Visitor'">You're currently a visitor, ask for permission to edit!</h3>
+                    <mat-card id="secondary" class="mat-elevation-z8" *ngIf="(asyncTabs | async) == null">
+                        <mat-card-title align="center" style="margin: auto;">Loading toolkit...</mat-card-title>
+                        <mat-spinner align="center" style="margin: auto;"></mat-spinner>
+                    </mat-card>
+                    <mat-tab-group *ngIf="permissions != 'Visitor'">
+                        <mat-tab *ngFor="let tab of asyncTabs | async">
+                            <ng-template mat-tab-label>{{tab}}</ng-template>
+                            <br>
+                            <div *ngIf="tab=='File'">
+                                <button class="btn btn-danger" (click)="refreshBtnOnClick()">Refresh Canvas
+                                    (Global)</button> &nbsp;
+                                <button *ngIf="(+canvas.dimensions.height) + (+canvas.dimensions.width) <= 350 && disableDrawing != true" class="btn btn-primary" (click)="saveCanvas()">Save Canvas (Global)</button>
+                                <button *ngIf="disableDrawing == true" class="btn btn-primary" disabled title="Canvas is busy at this time">Save Canvas (Global)</button>
+                                <button *ngIf="(+canvas.dimensions.height) + (+canvas.dimensions.width) > 350" class="btn btn-primary" disabled title="Canvas is too large to save">Save Canvas (Global)</button>
+                                &nbsp;
+                                <button class="btn btn-info" (click)="shareCanvas()">Share Canvas (Global)</button> &nbsp;
+                                <br>
+                                <br>
+                                <label for="canvas.dimensions.width">Canvas Width: </label>&nbsp;
+                                <input type="number" class="canvas.dimensions.width" [value]="canvas.dimensions.width"
+                                    (input)='canvasWidthChange($event.target.value)' max='2000' min='1'/> &nbsp;
+                                <br>
+                                <label for="canvas.dimensions.height">Canvas Height: </label>&nbsp;
+                                <input type="number" class="canvasHeight" [value]="canvas.dimensions.height"
+                                    (input)='canvasHeightChange($event.target.value)' max='2000' min='1'/> &nbsp;
+                                <br>
+                                <label for="backgroundColor">Background Colour (refresh to change): </label> &nbsp;
+                                <input [value]="'rgb(' + backgroundR + ', ' + backgroundG + ', '+ backgroundB + ')'" [colorPicker]="'rgb(' + backgroundR + ', ' + backgroundG + ', '+ backgroundB + ')'" [cpAlphaChannel]="'disabled'"
+                                    [cpOutputFormat]="'rgba'" [style.background]="color2" 
+                                    (colorPickerChange)="color2=$event;" (cpSliderDragEnd)="backgroundChange($event)"
+                                    (cpInputChange)="backgroundChange($event)" class="backgroundColor"/> &nbsp;
+                            </div>
+                            <div *ngIf="tab=='Tools'">
+                                <label for="fillColor">Fill Colour: </label> &nbsp;
+                                <input [value]="'rgb(' + selectedRed + ', ' + selectedGreen + ', '+ selectedBlue + ')'" [colorPicker]="'rgb(' + selectedRed + ', ' + selectedGreen + ', '+ selectedBlue + ')'" [cpAlphaChannel]="'disabled'"
+                                    [cpOutputFormat]="'rgba'" [style.background]="color" (colorPickerChange)="color=$event;"
+                                    (cpSliderDragEnd)="colorChange($event)" (cpInputChange)="colorChange($event)"
+                                    [cpToggle]="true" class="fillColor" /> &nbsp;
+
+                            <button class="btn btn-primary" [disabled]="selectedBrush == 'rectangle'" (click)="brushChangebtn('rectangle')">Square</button> &nbsp;
+                            <button class="btn btn-primary" [disabled]="selectedBrush == 'ellipse'" (click)="brushChangebtn('ellipse')">Circle</button> &nbsp;
+                            <button class="btn btn-primary" [disabled]="selectedBrush == 'triangle'" (click)="brushChangebtn('triangle')">Triangle</button> &nbsp;
+                            <button class="btn btn-primary" [disabled]="selectedBrush == 'diamond'" (click)="brushChangebtn('diamond')">Diamond</button> &nbsp;
+                            <br>
+                            <label for="size">Brush Size: </label>
+                            <mat-slider thumbLabel class="size" min="1" max="100" step="1" value="36"
+                                [(ngModel)]='selectedSize'>
+                            </mat-slider>
+                            &nbsp;
+
+                                <label for="outlineColor">Outline Colour: </label> &nbsp;
+                                <input [value]="'rgb(' + outlineRed + ', ' + outlineGreen + ', '+ outlineBlue + ')'" [colorPicker]="'rgb(' + outlineRed + ', ' + outlineGreen + ', '+ outlineBlue + ')'" [cpAlphaChannel]="'disabled'"
+                                    [cpOutputFormat]="'rgba'" [style.background]="color1"
+                                    (colorPickerChange)="color1=$event;" (cpSliderDragEnd)="outlineChange($event)"
+                                    (cpInputChange)="outlineChange($event)" class="outlineColor" /> &nbsp;
+                                <br>
+                                <label for="outWidth">Outline Width: </label> &nbsp;
+                                <mat-slider thumbLabel class="outWidth" min="1" max="20" step="1" value="1"
+                                    [(ngModel)]='outlineWidth'>
+                                </mat-slider>
+                                &nbsp;
+                                <mat-slide-toggle [checked]="true" [(ngModel)]='fillShape'>Fill</mat-slide-toggle> &nbsp;
+                                <mat-slide-toggle [(ngModel)]='showOutline'>Outline</mat-slide-toggle> &nbsp;
+                                <mat-slide-toggle [(ngModel)]='erase'>Erase</mat-slide-toggle>
+                            </div>
+                            <div *ngIf="tab=='Insert'">
+                                Copy + Paste + Export features will go here!
+                            </div>
+                            <div *ngIf="tab=='Canvas'">
+                                <script type="text/javascript">console.log("canvas");</script>
+                                TODO: Make this auto-open
+                                <button class="btn btn-info" (click)="canvasSettings(canvas)">Settings</button>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-card>
+            </mat-expansion-panel>
+        </div>
+        <hr>
+    </div>
+    <div class='col-sm-12' align="center" style="margin: auto;">
+        <div id="canvas-div" class="mat-elevation-z24"></div>
+        <div *ngIf='!canvas.image'>
+            <mat-card id="secondary" class="mat-elevation-z8">
+                <mat-card-title align="center" style="margin: auto;">Authenticating...</mat-card-title>
+                <mat-spinner align="center" style="margin: auto;"></mat-spinner>
+            </mat-card>
+        </div>
+    </div>
+    <div class='col-sm-12' *ngIf='canvas.image && !p'>
+        <mat-card id="secondary" class="mat-elevation-z8">
+            <mat-card-title align="center" style="margin: auto;">Loading canvas data...</mat-card-title>
+            <mat-spinner align="center" style="margin: auto;"></mat-spinner>
+        </mat-card>
+    </div>
+</div>

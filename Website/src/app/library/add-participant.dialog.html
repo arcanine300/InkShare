@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Add a New Participant</h2>
+<br>
+<mat-form-field style="display: inline;">
+    <mat-hint align="start"><strong>Enter a user's email to add them to the canvas</strong></mat-hint>
+    <input
+        matInput
+        [formControl]="data.myControl"
+        id="email"
+        type="email"
+        name="email"
+        required
+        minlength="6"
+        value="data.myControl.value"
+        pattern="^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$"
+        placeholder="Participant's Email"
+        [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <ng-container *ngFor="let email of data.filteredOptions | async">
+            <mat-option *ngIf="email != data.account.email" [value]="email">
+                {{email}}
+            </mat-option>
+        </ng-container>
+    </mat-autocomplete>
+    <mat-error *ngIf='data.myControl.errors?.required'>No email means nobody to add...</mat-error>
+    <mat-error *ngIf='data.myControl.errors?.pattern'>That doesn't look like an email...</mat-error>
+    <mat-error *ngIf='data.myControl.errors?.minlength'>The user's email needs to be at least 6 characters to be valid</mat-error>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>User Permissions</mat-label>
+    <mat-select [(value)]="data.permission">
+        <mat-option required *ngFor="let permission of data.permissions" [value]="permission.value">
+            {{permission.value}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="data.myControl.errors">Add</button>
+    <button mat-stroked-button (click)="onNoClick()">Cancel</button>
+</div>

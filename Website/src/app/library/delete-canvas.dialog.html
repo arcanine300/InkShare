@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>Delete Canvas?</h2>
+<br>
+<strong>This action cannot be undone!</strong>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Delete</button>
+    <button mat-stroked-button (click)="onNoClick()">Cancel</button>
+</div>

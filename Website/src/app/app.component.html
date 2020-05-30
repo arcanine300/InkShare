@@ -1,0 +1,14 @@
+<app-header></app-header>
+<br>
+<div id="routeBody" [@routeAnimation]="getAnimationData(routerOutlet)">
+  <router-outlet #routerOutlet="outlet"></router-outlet>
+  <footer>
+    <br>
+    <mat-card class="mat-elevation-z8">
+      <p>2020 - BTS 630 - <a href="https://github.com/SenecaCollegeBTSProjects/Group_10" target="parent">Group 10</a>
+      </p>
+    </mat-card>
+    <br>
+    <br>
+  </footer>
+</div>

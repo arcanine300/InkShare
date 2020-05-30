@@ -1,0 +1,24 @@
+.mat-form-field {
+  display: inline;
+  margin-right: 12px;
+}
+
+.header-image {
+    background-image: url('../../assets/no-avatar.png');
+    background-size: cover;
+}
+
+.mat-card-title, .mat-card-subtitle {
+  overflow-wrap: break-word;
+}
+
+#secondary{
+    max-width: 325px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-bottom: 15px;
+}
+
+#secondary:hover {
+  background-color: gray;
+}

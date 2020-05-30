@@ -1,0 +1,77 @@
+<br>
+<header>
+    <h1 fxShow="true" fxHide.lt-md routerLink="/home" style="cursor: pointer;" class="col-sm-3">InkShare <span class="glyphicon glyphicon-blackboard"></span></h1>
+    <button fxShow="true" fxHide.gt-sm mat-raised-button routerLink="/home" routerLinkActive="active" style="cursor: pointer;">
+        <h1>InkShare <span class="glyphicon glyphicon-blackboard"></span>&nbsp;</h1>
+    </button>
+</header>
+<br>
+<mat-toolbar color="primary" class="navbar mat-elevation-z8">
+    <span>
+        <button fxShow="true" fxHide.lt-md mat-raised-button routerLink="/home" routerLinkActive="active">
+            <mat-icon>home</mat-icon>
+            Home&nbsp;
+        </button>&nbsp;
+        <button mat-raised-button routerLink="/library" routerLinkActive="active">
+            <mat-icon>book</mat-icon>
+            <span fxShow="true" fxHide.lt-sm>Library</span>&nbsp;
+        </button>&nbsp;
+        <button mat-raised-button routerLink="/about" routerLinkActive="active">
+            <mat-icon>information</mat-icon>
+            <span fxShow="true" fxHide.lt-md>About</span>&nbsp;
+        </button>&nbsp;
+    </span>
+    <span class="fill-remaining-space"></span>
+    <span *ngIf="account">
+        <button mat-raised-button [matMenuTriggerFor]="notificationsMenu" [disabled]="!account.notifications">
+            <mat-icon>notifications</mat-icon>
+            <span fxShow="true" fxHide.lt-md>Notifications</span>&nbsp;
+        </button>
+        <mat-menu #notificationsMenu="matMenu" xPosition="before">
+            <div class="notification" align="center" *ngIf="account.notifications.length == 0">
+                <h5>No new notifications!</h5>
+                <p>You're up to date~</p>
+            </div>
+            <div class="notification" *ngFor="let notification of account.notifications">
+                <mat-card id="secondary" class="mat-elevation-z8" *ngIf='!canvases'>
+                    <mat-card-title>{{notification.title}}</mat-card-title>
+                    <mat-card-subtitle>{{notification.date}}</mat-card-subtitle>
+                    <mat-card-content>{{notification.content}}</mat-card-content>
+                    <mat-card-actions>
+                        <button *ngIf= "notification.title != 'Friend Request'" mat-raised-button color="warn" (click)="dismissNotif(notification)">
+                            Dismiss
+                        </button>
+                        <button *ngIf= "notification.title != 'Friend Request'" mat-raised-button color="primary" [disabled]="notification.link.length == 0" (click)="navigate(notification)">
+                            View
+                        </button>
+                        <button *ngIf= "notification.title == 'Friend Request'" button mat-raised-button color="warn" (click)="dismissNotif(notification)">
+                            Decline
+                        </button>
+                        <button *ngIf= "notification.title == 'Friend Request'" button mat-raised-button color="primary" (click)="navigate(notification)">
+                            Accept
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <span class="notification" align="center" *ngIf="account.notifications.length > 0">
+                That's everything for now~
+                <button mat-button color="warn" (click)="dismissNotif('all')">
+                    Dismiss All Notifications
+                </button>
+            </span>
+        </mat-menu>
+    </span>
+    &nbsp;&nbsp;
+    <span>
+        <button mat-raised-button [matMenuTriggerFor]="accountMenu" xPosition="after">
+            <mat-icon>settings</mat-icon>
+            <span fxShow="true" fxHide.lt-sm>Account</span>&nbsp;
+        </button>
+        <mat-menu #accountMenu="matMenu">
+            <button *ngIf="!account" mat-menu-item routerLink="/register">Sign Up</button>
+            <button *ngIf="!account" mat-menu-item routerLink="/login">Login</button>
+            <button *ngIf="account" mat-menu-item routerLink="/settings">Settings</button>
+            <button *ngIf="account" mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+    </span>
+</mat-toolbar>

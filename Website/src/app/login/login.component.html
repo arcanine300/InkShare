@@ -1,0 +1,73 @@
+<div class="row">
+    <div *ngIf='!account' class='col-sm-12'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h4>Login - enter information, and click the login button</h4>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            <form (ngSubmit)='onSubmit()' #f='ngForm'>
+
+                <mat-form-field style="display: inline;">
+                    <mat-hint align="start"><strong>Enter your account's email</strong></mat-hint>
+                    <input
+                        matInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        [(ngModel)]="credentials.email"
+                        #email="ngModel"
+                        required
+                        minlength="6"
+                        pattern="^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$"
+                        placeholder="Email">
+                    <mat-error *ngIf='email.errors?.required'>You'll need an email to log in with</mat-error>
+                    <mat-error *ngIf='email.errors?.pattern'>That doesn't appear to be an email</mat-error>
+                    <mat-error *ngIf='email.errors?.minlength'>Your email can't be less than 6 characters</mat-error>
+                </mat-form-field>
+
+                <mat-form-field style="display: inline;">
+                    <mat-hint align="start"><strong>Enter your account's password</strong></mat-hint>
+                    <input matInput
+                        id="password"
+                        type="password"
+                        name="password"
+                        [(ngModel)]="credentials.password"
+                        #password="ngModel"
+                        required
+                        minlength="6"
+                        maxlength="50"
+                        placeholder="Password">
+                    <mat-error *ngIf='password.errors?.required'>Password is required</mat-error>
+                    <mat-error *ngIf='password.errors?.minlength'>Password cannot be less than 6 characters</mat-error>
+                    <mat-error *ngIf='password.errors?.maxlength'>Password cannot be more than 50 characters</mat-error>
+                </mat-form-field>
+                <br>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="!f.valid && !authed">
+                        Login
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-default"  routerLink="/home">Back to home</button>
+                &nbsp;&nbsp;
+                <span *ngIf='loginError?.length>0' class="text-danger">{{ loginError }}
+                    &nbsp;&nbsp;<a (click)='reset()'>Reset password?</a></span>
+            </form>
+        </mat-card>
+    </div>
+    <div *ngIf='account' class='col-sm-4'>
+        <mat-card id="border"class="mat-elevation-z8">
+            <h4>Would you like to log out first?</h4>
+            <button mat-raised-button color="warn" (click)='logout()'>Logout</button>
+            &nbsp;&nbsp;
+            <button mat-stroked-button  routerLink="/home">Back</button>
+        </mat-card>
+    </div>
+    <div *ngIf='account' class='col-sm-8'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h3>You are currently logged in as "{{ account.email }}"</h3>
+        </mat-card>
+    </div>
+</div>

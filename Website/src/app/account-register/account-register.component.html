@@ -1,0 +1,132 @@
+<div class="row">
+    <div class='col-md-12'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h3>Want to join InkShare?</h3>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            <h4>Here's what you'll need:</h4>
+            <form [formGroup]="formGroup">
+                <mat-horizontal-stepper formArrayName="formArray" [linear]="true" #stepper>
+                    <mat-step formGroupName="0" [stepControl]="formArray.get([0])">
+                        <ng-template matStepLabel>
+                            <div>Email</div>
+                        </ng-template>
+                        <mat-form-field>
+                            <mat-label>What's your email?</mat-label>
+                            <input matInput type="email" formControlName="emailFormCtrl">
+                            <mat-error>You'll need a valid email to log in with.</mat-error>
+                        </mat-form-field>
+                        <div>
+                            <button mat-raised-button color="warn" matStepperPrevious disabled>Back</button>
+                            &nbsp;&nbsp;
+                            <button
+                                *ngIf="regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) && !existTest(formArray.value[0].emailFormCtrl)"
+                                mat-raised-button color="primary" matStepperNext>Next</button>
+                            <button
+                                *ngIf="!regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) || existTest(formArray.value[0].emailFormCtrl)"
+                                mat-raised-button color="primary" matStepperNext disabled>Next</button>
+                            &nbsp;&nbsp;
+                            <strong *ngIf="formArray.value[0].emailFormCtrl.length < 1" class="text-danger">
+                                You'll need a unique email to register</strong>
+                            <strong *ngIf="!regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) && formArray.value[0].emailFormCtrl.length > 0"
+                                class="text-danger">
+                                That doesn't appear to be a vaild email</strong>
+                            <strong *ngIf="existTest(formArray.value[0].emailFormCtrl)" class="text-danger">
+                                That email seems to already exists&nbsp;&nbsp;<a (click)='reset()'>Reset password?</a></strong>
+                            <span *ngIf="regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) && !existTest(formArray.value[0].emailFormCtrl)">
+                                Email looks good!</span>
+                        </div>
+                    </mat-step>
+
+                    <mat-step formGroupName="1" [stepControl]="formArray.get([1])">
+                        <ng-template matStepLabel>Username</ng-template>
+                        <mat-form-field>
+                            <mat-label>What should we call you?</mat-label>
+                            <input matInput formControlName="userNameFormCtrl" required>
+                            <mat-error>You'll need a valid username for others to see.</mat-error>
+                        </mat-form-field>
+                        <div>
+                            <button mat-raised-button color="warn" matStepperPrevious>Back</button>
+                            &nbsp;&nbsp;
+                            <button *ngIf="formArray.value[1].userNameFormCtrl.length > 0" mat-raised-button
+                                color="primary" matStepperNext>Next</button>
+                            <button *ngIf="formArray.value[1].userNameFormCtrl.length < 1" mat-raised-button
+                                color="primary" matStepperNext disabled>Next</button>
+                            &nbsp;&nbsp;
+                            <strong *ngIf="formArray.value[1].userNameFormCtrl.length < 1" class="text-danger">
+                                Your username needs to contain at least 1 character</strong>
+                            <strong *ngIf="formArray.value[1].userNameFormCtrl.length > 50" class="text-danger">
+                                Woah chill out, try to keep your username under 50 characters</strong>
+                            <span *ngIf="formArray.value[1].userNameFormCtrl.length > 0 && formArray.value[1].userNameFormCtrl.length < 51">
+                                Username is valid!</span>
+                        </div>
+                    </mat-step>
+
+                    <mat-step formGroupName="2" [stepControl]="formArray?.get([2])">
+                        <ng-template matStepLabel>Password</ng-template>
+                        <mat-form-field>
+                            <mat-label>What will your password be?</mat-label>
+                            <input matInput type="password" formControlName="passwordFormCtrl" required>
+                            <mat-error>You'll need a password to log in with.</mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Can you confirm it once more?</mat-label>
+                            <input matInput type="password" formControlName="passwordConfirmFormCtrl" required>
+                            <mat-error>Please enter your above password again.</mat-error>
+                        </mat-form-field>
+                        <div>
+                            <button mat-raised-button color="warn" matStepperPrevious>Back</button>
+                            &nbsp;&nbsp;
+                            <button
+                                *ngIf="formArray.value[2].passwordFormCtrl.length > 5 && formArray.value[2].passwordFormCtrl.length < 51 && formArray.value[2].passwordFormCtrl == formArray.value[2].passwordConfirmFormCtrl"
+                                mat-raised-button color="primary" matStepperNext>Next</button>
+                            <button
+                                *ngIf="formArray.value[2].passwordFormCtrl.length < 6 || formArray.value[2].passwordFormCtrl.length > 50 || formArray.value[2].passwordFormCtrl != formArray.value[2].passwordConfirmFormCtrl"
+                                mat-raised-button color="primary" matStepperNext disabled>Next</button>
+                            &nbsp;&nbsp;
+                            <strong *ngIf="formArray.value[2].passwordFormCtrl.length < 6" class="text-danger">Passwords
+                                can't be less than 6 characters.</strong>
+                            <strong *ngIf="formArray.value[2].passwordFormCtrl.length > 50" class="text-danger">Passwords
+                                can't be more than 50 characters.</strong>
+                            <strong
+                                *ngIf="formArray.value[2].passwordFormCtrl != formArray.value[2].passwordConfirmFormCtrl"
+                                class="text-danger">Your passwords must match!</strong>
+                            <span
+                                *ngIf="formArray.value[2].passwordFormCtrl.length > 5 && formArray.value[2].passwordFormCtrl.length < 51 && formArray.value[2].passwordFormCtrl == formArray.value[2].passwordConfirmFormCtrl">
+                                Passwords match</span>
+                        </div>
+                    </mat-step>
+
+                    <mat-step>
+                        <ng-template matStepLabel>Confirm your information</ng-template>
+                        <p>Your email will be: <strong>{{formArray.value[0].emailFormCtrl}}</strong></p>
+                        <p>You will be seen as: <strong>{{formArray.value[1].userNameFormCtrl}}</strong></p>
+                        <p *ngIf="formArray.value[2].passwordFormCtrl != formArray.value[2].passwordConfirmFormCtrl">
+                            Please ensure your passwords match!</p>
+                        <p *ngIf="formArray.value[2].passwordFormCtrl == formArray.value[2].passwordConfirmFormCtrl">
+                            Passwords match!</p>
+                        <br>
+                        <p>Once you're sure everything is set, click to register below.</p>
+                        <div>
+                            <button mat-raised-button color="warn" matStepperPrevious>Back</button>
+                            &nbsp;&nbsp;
+                            <button
+                                *ngIf="regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) && formArray.value[1].userNameFormCtrl.length > 0 && formArray.value[2].passwordFormCtrl.length > 5 && formArray.value[2].passwordFormCtrl.length < 51 && formArray.value[2].passwordFormCtrl == formArray.value[2].passwordConfirmFormCtrl"
+                                mat-raised-button color="primary" (click)="onSubmit()">Register</button>
+                            <button
+                                *ngIf="!regTest('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$',formArray.value[0].emailFormCtrl) || formArray.value[1].userNameFormCtrl.length < 1 || formArray.value[2].passwordFormCtrl.length < 6 || formArray.value[2].passwordFormCtrl.length > 50 || formArray.value[2].passwordFormCtrl != formArray.value[2].passwordConfirmFormCtrl"
+                                mat-raised-button color="primary" (click)="onSubmit()" disabled>Register</button>
+                        </div>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </form>
+            <br>
+            &nbsp;&nbsp;
+            <button mat-stroked-button class="btn btn-default" (click)="router.navigate(['home']);">Back to home</button>
+            &nbsp;&nbsp;
+            <span *ngIf='creationError?.length>0' class="text-danger">{{ creationError }}&nbsp;&nbsp;<a
+                    (click)='reset()'>Reset password?</a></span>
+        </mat-card>
+    </div>
+</div>

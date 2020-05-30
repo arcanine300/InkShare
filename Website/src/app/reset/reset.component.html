@@ -1,0 +1,58 @@
+<div class="row">
+    <div class='col-md-8 col-sm-12'>
+        <h4>Change Password</h4>
+        <form (ngSubmit)='onSubmit()' #f='ngForm'>
+            <div class="form-group">
+                <label class="control-label" for="email">Email:</label>
+                <div *ngIf='email.invalid && (email.dirty || email.touched)' class='alert alert-danger'>
+                    <div *ngIf='email.errors?.required'>You'll need an email to reset your password</div>
+                    <div *ngIf='email.errors?.pattern'>That doesn't appear to be an email</div>
+                    <div *ngIf='email.errors?.minlength'>Your email can't be less than 6 characters</div>
+                </div>
+                <input type="email" class="form-control" id="email" name="email" [(ngModel)]="credentials.email"
+                    #email="ngModel" required minlength="6" pattern="^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$" value='{{email}}'autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="password">Password:</label>
+                <div *ngIf='password.invalid && (password.dirty || password.touched)' class='alert alert-danger'>
+                    <div *ngIf='password.errors?.required'>Password is required</div>
+                    <div *ngIf='password.errors?.minlength'>Password cannot be less than 6 characters</div>
+                    <div *ngIf='password.errors?.maxlength'>Password cannot be more than 50 characters</div>
+                </div>
+                <input type="password" class="form-control" id="password" name="password"
+                    [(ngModel)]="credentials.password" #password="ngModel" required minlength="6" maxlength="50">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="newPassword">New Password:</label>
+                <div *ngIf='newPassword.invalid && (newPassword.dirty || newPassword.touched)' class='alert alert-danger'>
+                    <div *ngIf='newPassword.errors?.required'>You must enter a new password</div>
+                    <div *ngIf='newPassword==password'>You cannot use your previous password</div>
+                    <div *ngIf='newPassword.errors?.minlength'>Password cannot be less than 6 characters</div>
+                    <div *ngIf='newPassword.errors?.maxlength'>Password cannot be more than 50 characters</div>
+                </div>
+                <input type="password" class="form-control" id="newPassword" name="newPassword"
+                    [(ngModel)]="credentials.newPassword" #newPassword="ngModel" required minlength="6" maxlength="50">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="newPasswordConfirm">Confirm New Password:</label>
+                <div *ngIf='newPasswordConfirm.invalid && (newPasswordConfirm.dirty || newPasswordConfirm.touched)'
+                    class='alert alert-danger'>
+                    <div *ngIf='newPasswordConfirm.errors?.required'>Please retype your password to confirm it</div>
+                    <div *ngIf='newPassword!=newPasswordConfirm'>Passwords must match</div>
+                </div>
+                <input type="password" class="form-control" id="newPasswordConfirm" name="newPasswordConfirm"
+                    [(ngModel)]="credentials.newPasswordConfirm" #newPasswordConfirm="ngModel" required minlength="6" maxlength="50">
+            </div>
+
+            <button *ngIf='!(email.invalid || password.invalid || newPassword.invalid || newPasswordConfirm.invalid)'
+                class="btn btn-primary" type="submit">Change Password</button>
+            <button *ngIf='(email.invalid || password.invalid || newPassword.invalid || newPasswordConfirm.invalid)'
+                class="btn btn-primary" type="submit" disabled>Change Password</button>
+            &nbsp;&nbsp;
+            <a class="btn btn-default" routerLink='home'>Back to home</a>
+        </form>
+    </div>
+</div>

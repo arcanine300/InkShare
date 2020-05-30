@@ -1,0 +1,103 @@
+<div class="row">
+    <div class='col-md-8 col-sm-12'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h2>BTS 630 - Capstone Major Project</h2>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            <h3>InkShare</h3>
+            <p>Welcome, and thank you for participating in using InkShare!</p>
+            <p>InkShare allows users to collaborate on drawing projects from anywhere via Socket.io and P5 integrations
+                with Angular.</p>
+            <p>InkShare uses five fundamental but seperate parts divided over three servers to operate.</p>
+            <p>Below you can find the three fundamental parts and how they losely operate.</p>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            Fundamental Parts
+            <ol>
+                <li>Website - Frontend user UI provided via Angular/cli encased in a Node.js wrapper.</li>
+                <li>Webservers - Connects canvases together in real time via Socket.io</li>
+                <li>Canvas App - Implemented via P5 and minor JavaScript black magic.</li>
+                <li>Webservice - Security bridge to the database using get and put requests.</li>
+                <li>Database - Backend data storage provided via a MongoDB service.</li>
+            </ol>
+            &nbsp;
+            Servers
+            <ol>
+                <li>Website - Heroku Server 1
+                    <ul>
+                        <li>Contains the frontend that the user sees and operates with.</li>
+                        <li>Uses Angular routing, forum validation to communicate with our webservice. This includes:
+                            <ul>
+                                <li>Creating accounts</li>
+                                <li>Logging in</li>
+                                <li>Canvas handoffs</li>
+                            </ul>
+                        </li>
+                        <li>Uses Socket.io and as js node wrapper to display a dynamic P5 canvas.</li>
+                        <li>Features authentication and privacy components.</li>
+                        <li>Dynamically generates additional Socket.io servers for every new canvas, hosted locally on
+                            the same server.</li>
+                    </ul>
+                </li>
+                <li>Webservice - Heroku Server 2
+                    <ul>
+                        <li>Uses get and put requests from the Website to securely communicate with the database for the
+                            Website.</li>
+                        <li>Handles the security of the database by not allowing clients to directly interact with the
+                            data.</li>
+                    </ul>
+                </li>
+                <li>Database - MongoDB Server
+                    <ul>
+                        <li>Hosts user accounts</li>
+                        <li>Hosts canvases</li>
+                        <li>Communicates with the webservice via a backend schema.</li>
+                    </ul>
+                </li>
+            </ol>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            <h3>Basic User Information</h3>
+            <dl *ngIf="account" class="dl-horizontal">
+                <dt>Encoded payload</dt>
+                <dd>{{ accountToken }}</dd>
+                <dt>&nbsp;</dt>
+                <dd>&nbsp;</dd>
+                <dt>Decoded Account</dt>
+                <dd>{{ account | json }}</dd>
+                <dt>&nbsp;</dt>
+                <dd>&nbsp;</dd>
+                <dt>Decoded Canvas</dt>
+                <dd>{{ canvas | json }}</dd>
+                <dt>&nbsp;</dt>
+                <dd>&nbsp;</dd>
+                <dt>Username</dt>
+                <dd>{{ account.userName }}</dd>
+                <dt>Email</dt>
+                <dd>{{ account.email }}</dd>
+                <dt>ID</dt>
+                <dd>{{ account._id }}</dd>
+                <dt>Theme</dt>
+                <dd>{{ account.theme }}</dd>
+                <dt>Admin Status</dt>
+                <dd>{{ account.isAdmin }}</dd>
+                <dt>&nbsp;</dt>
+                <dd>&nbsp;</dd>
+                <dt>Canvases</dt>
+                <dd>{{ account.canvases.length }}</dd>
+                <dt>Friends</dt>
+                <dd>{{ account.friends.length }}</dd>
+                <dt>&nbsp;</dt>
+                <dd>&nbsp;</dd>
+                <dt>Issued date-and-time</dt>
+                <dd>{{ accountTokenIssuedTimestamp }}</dd>
+            </dl>
+            <strong *ngIf="!account">
+                No data to view, you're not logged in!
+            </strong>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Canvas Setup</h2>
+<br>
+<mat-form-field>
+    <mat-hint align="start"><strong>Name your new canvas</strong></mat-hint>
+    <input matInput id="canvasName" name="canvasName" [(ngModel)]="data.canvasName" #canvasName="ngModel" required
+        minlength="1" maxlength="50" value="data.canvasName" placeholder="Canvas Name">
+    <mat-error *ngIf='canvasName.errors?.required'>Please enter a name for your new canvas</mat-error>
+    <mat-error *ngIf='canvasName.errors?.minlength'>Your canvas name can't be less than 1 character</mat-error>
+    <mat-error *ngIf='canvasName.errors?.maxlength'>Your canvas name can't be more than 50 characters</mat-error>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Canvas Type</mat-label>
+    <mat-select [(value)]="data.type">
+        <mat-option reqired *ngFor="let type of data.types" [value]="type.value">
+            {{type.value}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+<div mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Create</button>
+    <button mat-stroked-button (click)="onNoClick()">Cancel</button>
+</div>

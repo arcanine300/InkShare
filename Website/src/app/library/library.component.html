@@ -1,0 +1,136 @@
+<div *ngIf='account' class="row">
+    <div class='col-sm-12' *ngIf='router.url == "/accept/"+library'>
+        <mat-card id="secondary" class="mat-elevation-z8" align="center" style="margin: auto;">
+            <mat-card-title align="center" style="margin: auto;">Authenticating...</mat-card-title>
+            <mat-spinner align="center" style="margin: auto;"></mat-spinner>
+        </mat-card>
+    </div>
+    <div class='col-sm-9' *ngIf='router.url != "/accept/"+library'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h4 *ngIf='account.email'>Logged in as {{account.userName}}.</h4>
+            <h4 *ngIf='account.email && router.url == "/library/sort/"+library'>Filtering canvases by "{{library}}".</h4>
+            <h4 *ngIf='account.email && router.url != "/library/sort/"+library'>Welcome back, what are we drawing today?</h4>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8" *ngIf="this.router.url != '/library/sort/'+library">
+            <h3>Your Canvases</h3>
+            <br>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+                <mat-card id="secondary" class="mat-elevation-z8" *ngIf="!canvases">
+                    <mat-card-title align="center" style="margin: auto;">Loading canvases...</mat-card-title>
+                    <mat-spinner align="center" style="margin: auto;"></mat-spinner>
+                </mat-card>
+                <ng-container *ngFor="let canvas of canvases">
+                    <mat-card id="secondary" class="mat-elevation-z8" *ngIf='account._id == canvas.owner'
+                        (mouseenter)="setSelected(canvas)" (mouseleave)="setSelected(undefined)">
+                        <mat-card-header>
+                            <div mat-card-avatar
+                                style="background-image: url('../../assets/no-avatar.png'); background-size: cover;">
+                            </div>
+                            <mat-card-title>{{canvas.name}}</mat-card-title>
+                            <mat-card-subtitle>{{library}}</mat-card-subtitle>
+                        </mat-card-header>
+                        <img mat-card-image src="../../assets/no-canvas.jpg" alt=canvas.name>
+                        <mat-card-content *ngIf='selected!=canvas' style="font-size: 92%;">Last modified:<br>
+                            {{canvas.modified}}</mat-card-content>
+                        <mat-card-actions *ngIf='selected==canvas'>
+                            <button mat-raised-button color="primary" title="Enter Canvas" 
+                                (click)="editCanvas(selected)"><mat-icon>create</mat-icon></button>
+                            <button mat-raised-button title="Share Canvas" 
+                                (click)="shareCanvas(selected)"><mat-icon>how_to_reg</mat-icon></button>
+                            <button mat-raised-button color="accent" title="Canvas Settings" 
+                                (click)="canvasSettings(selected)"><mat-icon>settings</mat-icon></button>
+                            <button mat-raised-button color="warn" *ngIf='canvas.owner == account._id' title="Delete Canvas" 
+                                (click)="deleteCanvas(selected)"><mat-icon>delete_sweep</mat-icon></button>
+                        </mat-card-actions>
+                    </mat-card>
+                </ng-container>
+                <mat-card id="secondary" class="mat-elevation-z8" *ngIf='account.email == library && canvases != undefined'
+                    style="height: 230px; width: 190px;">
+                    <mat-card-header>
+                        <mat-card-title>New Canvas?</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p (click)="newCanvas()" style="cursor: pointer;">
+                            <mat-icon style="font-size: 1160%;" aria-hidden="false" aria-label="Create a new canvas">
+                                add_photo_alternate</mat-icon>
+                        </p>
+                    </mat-card-content>
+                </mat-card>
+                <hr>
+            </div>
+        </mat-card>
+        <br>
+        <mat-card id="border" class="mat-elevation-z8">
+            <h3>Canvases shared with you</h3>
+            <br>
+            <div *ngIf='canvases && canvases.length < 1'>
+                No shared canvases!
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+                <mat-card id="secondary" class="mat-elevation-z8" *ngIf='!canvases'>
+                    <mat-card-title>Loading...</mat-card-title>
+                    &nbsp;<mat-spinner align="center"></mat-spinner>
+                </mat-card>
+                <ng-container *ngFor="let canvas of canvases">
+                    <mat-card id="secondary" class="mat-elevation-z8"
+                        *ngIf='account._id != canvas.owner && canvas.owner != ""' (mouseenter)="setSelected(canvas)"
+                        (mouseleave)="setSelected(undefined)">
+                        <mat-card-header>
+                            <div mat-card-avatar
+                                style="background-image: url('../../assets/no-avatar.png'); background-size: cover;">
+                            </div>
+                            <mat-card-title>{{canvas.name}}</mat-card-title>
+                            <mat-card-subtitle>{{library}}</mat-card-subtitle>
+                        </mat-card-header>
+                        <img mat-card-image src="../../assets/no-canvas.jpg" alt=canvas.name>
+                        <mat-card-content *ngIf='selected!=canvas' style="font-size: 92%;">Last modified:<br>
+                            {{canvas.modified}}</mat-card-content>
+                        <mat-card-actions *ngIf='selected==canvas' align='center'>
+                            <button mat-raised-button color="primary" title="Enter Canvas"
+                                (click)="editCanvas(selected)"><mat-icon>create</mat-icon></button>
+                            <button mat-raised-button title="Share Canvas"
+                                (click)="shareCanvas(selected)"><mat-icon>how_to_reg</mat-icon></button>
+                        </mat-card-actions>
+                    </mat-card>
+                </ng-container>
+                <hr>
+            </div>
+        </mat-card>
+    </div>
+    <div class='col-sm-3' *ngIf='router.url == "/library/view/"+account.email'>
+        <mat-card id="info" class="mat-elevation-z8">
+            <h3>Friends</h3>
+        </mat-card>
+        <br>
+        <mat-card class="mat-elevation-z8">
+            <div *ngIf='!friends'>
+                <mat-card-title>Loading friends...</mat-card-title>
+                &nbsp;<mat-spinner align="center"></mat-spinner>
+            </div>
+            <ng-container *ngFor="let friend of friends">
+                <mat-card id="secondary" style="cursor: pointer;" (click)="viewLibrary(friend)">
+                    <mat-card-title>{{friend.userName}}</mat-card-title>
+                    <mat-card-subtitle>{{friend.email}}</mat-card-subtitle>
+                </mat-card>
+                <br>
+            </ng-container>
+            <div *ngIf='friends && friends.length < 1'>
+                <mat-card id="secondary">
+                    Sorry, you don't appear to have any friends...
+                </mat-card>
+            </div>
+            <br>
+            <div *ngIf='friends'>
+                <mat-card id="accent" style="cursor: pointer;" (click)="addFriend('')">
+                    Add a new friend
+                </mat-card>
+            </div>
+        </mat-card>
+        <br>
+        <button mat-raised-button color="primary" title="TEST" (click)="test()">TEST</button>
+    </div>
+</div>
+<div *ngIf='!account'>
+    <mat-spinner></mat-spinner>
+</div>

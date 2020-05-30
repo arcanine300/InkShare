@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BTR630 InkShare Web Service</title>
+</head>
+<body>
+  <h1>InkShare Web Service</h1>
+  <hr>
+  <h2>Routes:</h2>
+  <div>
+    <h4>Get Requests</h4>
+    <ul>
+      <li><a href="/accounts">/accounts</a> - Get a list of all accounts, sensitive data is expunged, used for "add friend" auto-complete</li>
+      <li><a href="/canvases">/canvases</a> - Get a list of all canvases, used for featured canvases</li>
+      <li><a href="/accounts/0">/accounts/:id</a> - Get details of an account by direct ID</li>
+      <li><a href="/canvases/0">/canvases/:id</a> - Get details of a canvas by direct ID</li>
+      <li><a href="/accounts/friends/0">/accounts/friends/:id</a> - Get all friended accounts of a given ID</li>
+      <li><a href="/accounts/participates/0">/canvases/participates/:id</a> - Get all participants of a given canvas ID</li>
+      <li><a href="/canvases/viewable/0">/canvases/viewable/:id</a> - Get all canvases an account's ID may access</li>
+    </ul>
+    <h4>Post Requests</h4>
+    <ul>
+      <li><a href="/accounts/login">/accounts/login</a> - Given an email and password, receive an auth token if genuine</li>
+      <li><a href="/accounts/create">/accounts/create</a> - Given at least an email, username, password and password confirm, generate a new account</li>
+      <li><a href="/canvases/create">/canvases/create</a> - Given at least a name, owner, and participants (must have owner included in participants), generate a new canvas</li>
+    </ul>
+    <h4>Put Requests</h4>
+    <ul>
+      <li><a href="/accounts/update">/accounts/update</a> - When ID and valid password of an account is provided through a request body, update all other values provided</li>
+      <li><a href="/canvases/update">/canvases/update</a> - When ID of a canvas is provided through a request body, update all other values provided</li>
+      <li><a href="/accounts/delete">/accounts/delete</a> - When ID and valid password of an account is provided through a request body, delete it</li>
+      <li><a href="/canvases/delete">/canvases/delete</a> - When ID of a canvas is provided through a request body, mark for deletion</li>
+    </ul>
+  </div>
+  <hr>
+  <h3>Front-end Interface:</h3>
+  <a href="https://inkshare-frontend.herokuapp.com/">Click here to go to the InkShare front-end web application</a>
+</body>
+</html>

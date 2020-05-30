@@ -1,0 +1,67 @@
+<div class="row">
+    <div class='col-sm-12'>
+        <h2 mat-dialog-title>Canvas Settings</h2>
+        <br>
+        <mat-form-field style="display: inline;">
+            <mat-hint align="start"><strong>Canvas name</strong></mat-hint>
+            <input
+                matInput
+                id="name"
+                name="name"
+                [(ngModel)]="data.canvas.name"
+                #name="ngModel"
+                required
+                minlength="1"
+                maxlength="50"
+                value="data.canvas.name"
+                placeholder="Canvas Name">
+            <mat-error *ngIf='name.errors?.required'>Please enter a name for your new canvas</mat-error>
+            <mat-error *ngIf='name.errors?.minlength'>Your canvas name can't be less than 1 character</mat-error>
+            <mat-error *ngIf='name.errors?.maxlength'>Your canvas name can't be more than 50 characters</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Canvas Type</mat-label>
+            <mat-select [(value)]="data.type">
+                <mat-option required *ngFor="let type of data.types" [value]="type.value">
+                    {{type.value}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="display: inline;">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Find a participant...">
+        </mat-form-field>
+        
+        <table mat-table [dataSource]="data.dataSource" style="overflow: auto;">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>&nbsp;&nbsp;Name&nbsp;&nbsp;</th>
+                <td mat-cell *matCellDef="let element">&nbsp;&nbsp;{{element.userName}}&nbsp;&nbsp;</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>&nbsp;&nbsp;Email&nbsp;&nbsp;</th>
+                <td mat-cell *matCellDef="let element">&nbsp;&nbsp;{{element.email}}&nbsp;&nbsp;</td>
+            </ng-container>
+            <ng-container matColumnDef="permissions">
+                <th mat-header-cell *matHeaderCellDef>&nbsp;&nbsp;Permissions&nbsp;&nbsp;</th>
+                <td mat-cell *matCellDef="let element">&nbsp;&nbsp;{{element.permissions}}&nbsp;&nbsp;</td>
+            </ng-container>
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef>&nbsp;&nbsp;Options&nbsp;&nbsp;</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button [disabled]="element._id == data.canvas.owner" color="primary" (click)="promoteParticipant(element)">Promote</button>&nbsp;
+                    <button mat-button [disabled]="element._id == data.canvas.owner" color="accent" (click)="demoteParticipant(element)">Demote</button>&nbsp;
+                    <button mat-button [disabled]="element._id == data.canvas.owner" color="warn" (click)="removeParticipant(element)">Remove</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button mat-button [disabled]="element._id == data.canvas.owner" color="warn" (click)="transferOwnership(element)">Transfer Ownership</button>&nbsp;
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="data.displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: data.displayedColumns;"></tr>
+        </table>
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+            <button mat-stroked-button (click)="onNoClick()">Cancel</button>
+        </div>
+    </div>
+</div>

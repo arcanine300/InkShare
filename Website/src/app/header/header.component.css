@@ -1,0 +1,27 @@
+.notification {
+    min-width: 270px;
+    max-width: 270px;
+    width: max-content;
+    height: max-content;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 48px);
+    border-radius: 4px;
+    margin: 5px;
+    outline: 0;
+}
+
+.mat-card-title, .mat-card-subtitle {
+  overflow-wrap: break-word;
+}
+
+#secondary{
+    max-width: 325px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-bottom: 15px;
+}
+
+#secondary:hover {
+  background-color: gray;
+}
