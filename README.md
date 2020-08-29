@@ -1,5 +1,5 @@
 # InkShare
-Realtime collaborative drawing website built with Angular and P5.js. Webservice is made with express.js, NodeJS, and MongoDB database. Realtime canvases handled using Socket.io. http://inkshare-frontend.herokuapp.com/
+Realtime collaborative drawing website built with Angular and P5.js. Webservice is made with express.js, NodeJS, and MongoDB database. Realtime canvases networking is handled using Socket.io. http://inkshare-frontend.herokuapp.com/
 ![Users Canvas Library](Capture.PNG)
 ![Canvas Example](Capture2.PNG)
 ##### Darien Barnard
