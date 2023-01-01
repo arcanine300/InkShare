@@ -10,7 +10,7 @@
   "author": "Group 10",
   "license": "ISC",
   "dependencies": {
-    "@angular-devkit/build-angular": "^0.803.22",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/animations": "^8.2.14",
     "@angular/cdk": "^8.2.3",
     "@angular/cli": "^8.3.9",
